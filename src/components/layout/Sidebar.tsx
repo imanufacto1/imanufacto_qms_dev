@@ -43,7 +43,7 @@ const navigation = [
   },
   {
     name: "Administration",
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       { name: "Organization", href: "/organization", icon: Building2 },
       { name: "Department", href: "/department", icon: Grid },
@@ -72,7 +72,7 @@ const navigation = [
   },
   {
     name: "Modules", // Example other group
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
        { name: "Plants", href: "/plants", icon: Factory },
        { name: "Documents", href: "/documents", icon: Files },
@@ -88,7 +88,9 @@ export function Sidebar() {
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(() => {
     const initialState: Record<string, boolean> = {};
     navigation.forEach(group => {
-      initialState[group.name] = group.defaultOpen ?? true;
+      // Auto-expand if the group contains the active route
+      const hasActiveItem = group.items.some(item => item.href === pathname);
+      initialState[group.name] = hasActiveItem || (group.defaultOpen ?? false);
     });
     return initialState;
   });
