@@ -1,0 +1,74 @@
+name: Automated Pull Requests
+
+on:
+  push:
+    branches:
+      - dev
+      - qa
+
+jobs:
+  # ------------------------------------------------------------------
+  # 1. Auto-Create PR from Dev -> QA
+  # ------------------------------------------------------------------
+  create-qa-pr:
+    name: Create PR (Dev -> QA)
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking for existing PRs from dev to qa..."
+          # Check if a PR already exists
+          EXISTING_PR=$(gh pr list --base qa --head dev --json url --jq '.[0].url')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            echo "Creating PR from dev to qa..."
+            gh pr create \
+              --base qa \
+              --head dev \
+              --title "🚀 Promote Dev to QA" \
+              --body "Automated PR to promote changes from Development to QA environment. Please review and merge."
+          else
+            echo "PR already exists: $EXISTING_PR"
+          fi
+
+  # ------------------------------------------------------------------
+  # 2. Auto-Create PR from QA -> Prod
+  # ------------------------------------------------------------------
+  create-prod-pr:
+    name: Create PR (QA -> Prod)
+    if: github.ref == 'refs/heads/qa'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking for existing PRs from qa to prod..."
+          # Check if a PR already exists
+          EXISTING_PR=$(gh pr list --base prod --head qa --json url --jq '.[0].url')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            echo "Creating PR from qa to prod..."
+            gh pr create \
+              --base prod \
+              --head qa \
+              --title "🚀 Promote QA to Production" \
+              --body "Automated PR to promote changes from QA to Production environment. ⚠️ This triggers a production deployment!"
+          else
+            echo "PR already exists: $EXISTING_PR"
+          fi
