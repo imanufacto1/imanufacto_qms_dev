@@ -89,6 +89,30 @@ const navigation = [
     ]
   },
   {
+    name: "Masters",
+    defaultOpen: false,
+    items: [
+      { name: "QMS", href: "/masters/qms", icon: ClipboardCheck },
+      { name: "HSE", href: "/masters/hse", icon: HardHat },
+      { name: "FSMS", href: "/masters/fsms", icon: Utensils },
+      { name: "ISMS", href: "/masters/isms", icon: Lock },
+      { name: "IATF", href: "/masters/iatf", icon: Car },
+      { name: "VDA", href: "/masters/vda", icon: Award },
+    ]
+  },
+  {
+    name: "Reports",
+    defaultOpen: false,
+    items: [
+      { name: "QMS", href: "/reports/qms", icon: ClipboardCheck },
+      { name: "HSE", href: "/reports/hse", icon: HardHat },
+      { name: "FSMS", href: "/reports/fsms", icon: Utensils },
+      { name: "ISMS", href: "/reports/isms", icon: Lock },
+      { name: "IATF", href: "/reports/iatf", icon: Car },
+      { name: "VDA", href: "/reports/vda", icon: Award },
+    ]
+  },
+  {
     name: "Modules", // Example other group
     defaultOpen: false,
     items: [
