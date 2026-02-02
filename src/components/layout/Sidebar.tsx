@@ -140,7 +140,6 @@ const navigation = [
     name: "Modules", // Example other group
     defaultOpen: false,
     items: [
-       { name: "Plants", href: "/plants", icon: Factory },
        { name: "Documents", href: "/documents", icon: Files },
     ]
   }
