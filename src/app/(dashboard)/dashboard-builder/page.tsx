@@ -1,0 +1,1 @@
+export default function DashboardBuilderPage() { return <div><h1 className="text-2xl font-bold">Dashboard Builder</h1></div>; }

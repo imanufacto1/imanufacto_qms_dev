@@ -1,0 +1,1 @@
+export default function WorkflowMasterPage() { return <div><h1 className="text-2xl font-bold">Workflow Master</h1></div>; }

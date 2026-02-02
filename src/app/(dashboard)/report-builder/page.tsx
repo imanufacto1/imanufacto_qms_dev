@@ -1,0 +1,1 @@
+export default function ReportBuilderPage() { return <div><h1 className="text-2xl font-bold">Report Builder</h1></div>; }

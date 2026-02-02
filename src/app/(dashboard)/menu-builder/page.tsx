@@ -1,0 +1,1 @@
+export default function MenuBuilderPage() { return <div><h1 className="text-2xl font-bold">Menu Builder</h1></div>; }

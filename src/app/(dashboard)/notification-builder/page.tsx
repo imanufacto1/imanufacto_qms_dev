@@ -1,0 +1,1 @@
+export default function NotificationBuilderPage() { return <div><h1 className="text-2xl font-bold">Notification Builder</h1></div>; }

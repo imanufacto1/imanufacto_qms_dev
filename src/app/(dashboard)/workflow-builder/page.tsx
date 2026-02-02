@@ -1,0 +1,1 @@
+export default function WorkflowBuilderPage() { return <div><h1 className="text-2xl font-bold">Workflow Builder</h1></div>; }

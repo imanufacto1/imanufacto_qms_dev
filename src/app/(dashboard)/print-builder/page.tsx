@@ -1,0 +1,1 @@
+export default function PrintBuilderPage() { return <div><h1 className="text-2xl font-bold">Print Builder</h1></div>; }

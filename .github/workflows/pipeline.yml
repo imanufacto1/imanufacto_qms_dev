@@ -1,0 +1,104 @@
+name: Multi-Environment Pipeline
+
+on:
+  push:
+    branches: [ "dev", "qa", "prod" ]
+  pull_request:
+    branches: [ "dev", "qa", "prod" ]
+
+jobs:
+  # ------------------------------------------------------------------
+  # 1. Continuous Integration (CI) - Runs on ALL PRs and Pushes
+  # ------------------------------------------------------------------
+  ci-check:
+    name: CI Check (Lint, Type, Test)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint Code
+        run: npm run lint
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+      - name: Build Check
+        run: npm run build
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  # ------------------------------------------------------------------
+  # 2. Deploy to Development (Dev) - Runs only on PUSH to 'dev'
+  # ------------------------------------------------------------------
+  deploy-dev:
+    name: Deploy to Dev
+    needs: ci-check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://dev.imanufacto.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Dev Environment
+        run: |
+          echo "🚀 Deploying to Development Environment..."
+          # Add your actual deployment commands here (e.g., Vercel, AWS, Docker)
+          echo "✅ Deployment to Dev Complete"
+
+  # ------------------------------------------------------------------
+  # 3. Deploy to QA - Runs only on PUSH to 'qa' (merged from dev)
+  # ------------------------------------------------------------------
+  deploy-qa:
+    name: Deploy to QA
+    needs: ci-check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/qa'
+    runs-on: ubuntu-latest
+    environment:
+      name: qa
+      url: https://qa.imanufacto.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to QA Environment
+        run: |
+          echo "🚀 Deploying to QA Environment..."
+          # Add your actual deployment commands here
+          echo "✅ Deployment to QA Complete"
+
+  # ------------------------------------------------------------------
+  # 4. Deploy to Production (Prod) - Runs only on PUSH to 'prod' (merged from qa)
+  # ------------------------------------------------------------------
+  deploy-prod:
+    name: Deploy to Production
+    needs: ci-check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/prod'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://imanufacto.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Production Environment
+        run: |
+          echo "🚀 Deploying to Production Environment..."
+          echo "⚠️  Ensure manual approval was granted if configured in GitHub Environments"
+          # Add your actual deployment commands here
+          echo "✅ Deployment to Production Complete"

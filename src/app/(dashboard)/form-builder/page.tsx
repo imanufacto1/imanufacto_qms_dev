@@ -1,0 +1,1 @@
+export default function FormBuilderPage() { return <div><h1 className="text-2xl font-bold">Form Builder</h1></div>; }

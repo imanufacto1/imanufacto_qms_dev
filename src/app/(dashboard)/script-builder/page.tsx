@@ -1,0 +1,1 @@
+export default function ScriptBuilderPage() { return <div><h1 className="text-2xl font-bold">Script Builder</h1></div>; }

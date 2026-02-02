@@ -1,0 +1,1 @@
+export default function MailLogsPage() { return <div><h1 className="text-2xl font-bold">Mail Logs</h1></div>; }

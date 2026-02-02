@@ -1,0 +1,1 @@
+export default function AboutTemplatesPage() { return <div><h1 className="text-2xl font-bold">About Templates</h1></div>; }

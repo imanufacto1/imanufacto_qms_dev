@@ -1,0 +1,1 @@
+export default function VisualSettingsPage() { return <div><h1 className="text-2xl font-bold">Visual Settings</h1></div>; }
