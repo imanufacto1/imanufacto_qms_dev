@@ -29,7 +29,13 @@ import {
   Activity,
   Mail,
   CreditCard,
-  Palette
+  Palette,
+  ClipboardCheck,
+  HardHat,
+  Utensils,
+  Lock,
+  Car,
+  Award
 } from "lucide-react";
 
 // Define navigation structure with groups
@@ -68,6 +74,18 @@ const navigation = [
       { name: "Subscription", href: "/subscription", icon: CreditCard },
       { name: "Visual Settings", href: "/visual-settings", icon: Palette },
       { name: "Settings", href: "/settings", icon: Settings },
+    ]
+  },
+  {
+    name: "IMS",
+    defaultOpen: false,
+    items: [
+      { name: "QMS", href: "/qms", icon: ClipboardCheck },
+      { name: "HSE", href: "/hse", icon: HardHat },
+      { name: "FSMS", href: "/fsms", icon: Utensils },
+      { name: "ISMS", href: "/isms", icon: Lock },
+      { name: "IATF", href: "/iatf", icon: Car },
+      { name: "VDA", href: "/vda", icon: Award },
     ]
   },
   {
