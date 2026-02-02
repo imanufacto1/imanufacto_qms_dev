@@ -149,14 +149,14 @@ export function Sidebar() {
                     className={cn(
                       "group flex items-center px-3 py-2 text-sm font-medium rounded-r-full mr-4 transition-colors",
                       isActive
-                        ? "bg-[#e8f0fe] text-[#1967d2]" // Gmail-like active state
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        ? "bg-[#e8f0fe] dark:bg-blue-900/40 text-[#1967d2] dark:text-blue-400" // Gmail-like active state
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                     )}
                   >
                     <item.icon
                       className={cn(
                         "mr-3 h-4 w-4 flex-shrink-0", // Slightly smaller icons for dense list
-                        isActive ? "text-[#1967d2]" : "text-gray-500 group-hover:text-gray-500"
+                        isActive ? "text-[#1967d2] dark:text-blue-400" : "text-gray-500 dark:text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300"
                       )}
                       aria-hidden="true"
                     />
