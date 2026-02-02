@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { FileText, Shield, FileCheck, AlertCircle, BarChart, Users, Settings, Truck, ClipboardList, PenTool, BookOpen, AlertTriangle } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';

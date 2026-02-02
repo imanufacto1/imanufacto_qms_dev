@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Shield, FileCheck, Thermometer, UserCheck, Utensils, AlertOctagon, ClipboardList, AlertTriangle, Bug, Droplet, Clock } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';

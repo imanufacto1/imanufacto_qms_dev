@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Shield, Settings, Wrench, FileCheck, Target, Layers, GitPullRequest, Truck, AlertTriangle } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
