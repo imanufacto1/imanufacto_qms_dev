@@ -19,9 +19,10 @@ interface PolicyViewerProps {
   title: string;
   description: string;
   documents: PolicyDocument[];
+  enableEditing?: boolean;
 }
 
-export default function PolicyViewer({ title, description, documents: initialDocuments }: PolicyViewerProps) {
+export default function PolicyViewer({ title, description, documents: initialDocuments, enableEditing = true }: PolicyViewerProps) {
   // Initialize state with props
   const [documents, setDocuments] = useState<PolicyDocument[]>(initialDocuments);
   const [activeCategory, setActiveCategory] = useState<PolicyCategory | "All">("All");
@@ -137,13 +138,15 @@ export default function PolicyViewer({ title, description, documents: initialDoc
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button 
-            onClick={handleAddClick}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-          >
-            <Plus className="h-4 w-4" />
-            Add New
-          </button>
+          {enableEditing && (
+            <button 
+              onClick={handleAddClick}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              <Plus className="h-4 w-4" />
+              Add New
+            </button>
+          )}
         </div>
       </div>
 
@@ -194,20 +197,24 @@ export default function PolicyViewer({ title, description, documents: initialDoc
                     <p className="text-sm text-gray-500 line-clamp-2">{doc.description}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleEditClick(doc); }}
-                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-                      title="Edit Document"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </button>
-                     <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteClick(doc.id); }}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
-                      title="Delete Document"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    {enableEditing && (
+                      <>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleEditClick(doc); }}
+                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                          title="Edit Document"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeleteClick(doc.id); }}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                          title="Delete Document"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </>
+                    )}
                     {isExpanded ? (
                       <ChevronUp className="h-5 w-5 text-gray-400" />
                     ) : (

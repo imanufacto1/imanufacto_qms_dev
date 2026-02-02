@@ -137,7 +137,8 @@ export default function ManualsFSMSPage() {
     <PolicyViewer 
       title="FSMS Manual (ISO 22000)"
       description="Food Safety Management System Manual and Procedures."
-      documents={documents} 
+      documents={documents}
+      enableEditing={false}
     />
   );
 }

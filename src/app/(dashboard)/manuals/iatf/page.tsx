@@ -143,7 +143,8 @@ export default function ManualsIATFPage() {
     <PolicyViewer 
       title="IATF Manual (Automotive)"
       description="IATF 16949 Quality Management System Manual."
-      documents={documents} 
+      documents={documents}
+      enableEditing={false}
     />
   );
 }

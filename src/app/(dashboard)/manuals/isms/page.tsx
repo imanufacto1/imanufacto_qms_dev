@@ -119,7 +119,8 @@ export default function ManualsISMSPage() {
     <PolicyViewer 
       title="ISMS Manual (ISO 27001)"
       description="Information Security Management System Manual."
-      documents={documents} 
+      documents={documents}
+      enableEditing={false}
     />
   );
 }

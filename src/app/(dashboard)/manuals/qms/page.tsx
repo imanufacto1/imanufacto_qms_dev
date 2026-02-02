@@ -160,7 +160,8 @@ export default function ManualsQMSPage() {
     <PolicyViewer 
       title="QMS Manual (ISO 9001)"
       description="Comprehensive Quality Management System Manual and System-Level Procedures."
-      documents={documents} 
+      documents={documents}
+      enableEditing={false}
     />
   );
 }

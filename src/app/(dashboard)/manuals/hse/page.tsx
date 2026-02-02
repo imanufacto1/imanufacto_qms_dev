@@ -141,7 +141,8 @@ export default function ManualsHSEPage() {
     <PolicyViewer 
       title="HSE Manual (ISO 14001 & 45001)"
       description="Integrated Health, Safety, and Environment Management System Manual."
-      documents={documents} 
+      documents={documents}
+      enableEditing={false}
     />
   );
 }

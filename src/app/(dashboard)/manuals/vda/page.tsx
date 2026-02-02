@@ -123,7 +123,8 @@ export default function ManualsVDAPage() {
     <PolicyViewer 
       title="VDA Manual (German Automotive)"
       description="VDA Standards Manual (6.3 Process Audit, 6.5 Product Audit)."
-      documents={documents} 
+      documents={documents}
+      enableEditing={false}
     />
   );
 }
