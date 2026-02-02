@@ -2,12 +2,14 @@
 
 import { db } from '@/db';
 import { organizations, plants } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function getOrganizations() {
   try {
-    const orgs = await db.select().from(organizations).orderBy(organizations.createdAt);
+    const orgs = await db.select().from(organizations)
+      .where(eq(organizations.isCurrent, true))
+      .orderBy(organizations.createdAt);
     return { success: true, data: orgs };
   } catch (error) {
     console.error('Failed to fetch organizations:', error);
@@ -35,17 +37,25 @@ export async function addOrganization(data: { name: string; slug?: string; logo?
 
     revalidatePath('/organization');
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to add organization:', error);
+    if (error.code === '23505') {
+      return { success: false, error: 'Organization name already exists.' };
+    }
     return { success: false, error: 'Failed to add organization' };
   }
 }
 
 export async function deleteOrganization(id: string) {
   try {
-    // Note: This might fail if there are cascading dependencies not handled by DB
-    // Ideally we should delete children first or use CASCADE in DB schema
-    await db.delete(organizations).where(eq(organizations.id, id));
+    // SCD Type 2: Soft delete (expire)
+    await db.update(organizations)
+      .set({ 
+        isCurrent: false,
+        validTo: new Date()
+      })
+      .where(eq(organizations.id, id));
+      
     revalidatePath('/organization');
     return { success: true };
   } catch (error) {

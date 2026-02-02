@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { users, roles, departments, plants, organizations } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 // Fetch users with their role, department, plant, and organization info
@@ -24,7 +24,8 @@ export async function getUsers() {
     .leftJoin(roles, eq(users.roleId, roles.id))
     .leftJoin(departments, eq(roles.departmentId, departments.id))
     .leftJoin(plants, eq(departments.plantId, plants.id))
-    .leftJoin(organizations, eq(plants.organizationId, organizations.id));
+    .leftJoin(organizations, eq(plants.organizationId, organizations.id))
+    .where(eq(users.isCurrent, true));
     
     return { success: true, data: result };
   } catch (error) {
@@ -45,15 +46,32 @@ export async function addUser(data: {
     await db.insert(users).values(data);
     revalidatePath('/users');
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to add user:', error);
+    if (error.code === '23505') {
+       if (error.constraint_name?.includes('email')) {
+         return { success: false, error: 'Email already exists.' };
+       }
+       if (error.constraint_name?.includes('username')) {
+         return { success: false, error: 'Username already exists.' };
+       }
+       return { success: false, error: 'User already exists.' };
+    }
     return { success: false, error: 'Failed to add user' };
   }
 }
 
 export async function deleteUser(id: string) {
   try {
-    await db.delete(users).where(eq(users.id, id));
+    // SCD Type 2: Soft delete
+    await db.update(users)
+      .set({
+        isCurrent: false,
+        validTo: new Date(),
+        isActive: false // Also deactivate
+      })
+      .where(eq(users.id, id));
+      
     revalidatePath('/users');
     return { success: true };
   } catch (error) {

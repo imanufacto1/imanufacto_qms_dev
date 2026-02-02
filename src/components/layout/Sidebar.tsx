@@ -52,6 +52,7 @@ const navigation = [
     defaultOpen: false,
     items: [
       { name: "Organization", href: "/organization", icon: Building2 },
+      { name: "Plants", href: "/plants", icon: Factory },
       { name: "Department", href: "/department", icon: Grid },
       { name: "Master Builder", href: "/master-builder", icon: Hammer },
       { name: "Form Builder", href: "/form-builder", icon: FileText },

@@ -2,14 +2,14 @@
 
 import { db } from '@/db';
 import { plants } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function getPlants(organizationId?: string) {
   try {
-    let query = db.select().from(plants);
+    let query = db.select().from(plants).where(eq(plants.isCurrent, true));
     if (organizationId) {
-      // @ts-ignore - simple query construction
+      // @ts-ignore
       query = query.where(eq(plants.organizationId, organizationId));
     }
     const result = await query;
@@ -25,15 +25,25 @@ export async function addPlant(data: { organizationId: string; name: string; loc
     await db.insert(plants).values(data);
     revalidatePath('/plants');
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to add plant:', error);
+    if (error.code === '23505') {
+      return { success: false, error: 'Plant name already exists in this organization.' };
+    }
     return { success: false, error: 'Failed to add plant' };
   }
 }
 
 export async function deletePlant(id: string) {
   try {
-    await db.delete(plants).where(eq(plants.id, id));
+    // SCD Type 2: Soft delete
+    await db.update(plants)
+      .set({
+        isCurrent: false,
+        validTo: new Date()
+      })
+      .where(eq(plants.id, id));
+      
     revalidatePath('/plants');
     return { success: true };
   } catch (error) {

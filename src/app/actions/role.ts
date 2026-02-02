@@ -2,12 +2,18 @@
 
 import { db } from '@/db';
 import { roles } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function getRoles(departmentId: string) {
   try {
-    const result = await db.select().from(roles).where(eq(roles.departmentId, departmentId));
+    const result = await db.select().from(roles)
+      .where(
+        and(
+          eq(roles.departmentId, departmentId),
+          eq(roles.isCurrent, true)
+        )
+      );
     return { success: true, data: result };
   } catch (error) {
     console.error('Failed to fetch roles:', error);
@@ -20,15 +26,25 @@ export async function addRole(data: { departmentId: string; name: string; permis
     await db.insert(roles).values(data);
     revalidatePath('/roles');
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to add role:', error);
+    if (error.code === '23505') {
+      return { success: false, error: 'Role name already exists in this department.' };
+    }
     return { success: false, error: 'Failed to add role' };
   }
 }
 
 export async function deleteRole(id: string) {
   try {
-    await db.delete(roles).where(eq(roles.id, id));
+    // SCD Type 2: Soft delete
+    await db.update(roles)
+      .set({
+        isCurrent: false,
+        validTo: new Date()
+      })
+      .where(eq(roles.id, id));
+      
     revalidatePath('/roles');
     return { success: true };
   } catch (error) {
