@@ -80,12 +80,12 @@ const navigation = [
     name: "IMS",
     defaultOpen: false,
     items: [
-      { name: "QMS", href: "/qms", icon: ClipboardCheck },
-      { name: "HSE", href: "/hse", icon: HardHat },
-      { name: "FSMS", href: "/fsms", icon: Utensils },
-      { name: "ISMS", href: "/isms", icon: Lock },
-      { name: "IATF", href: "/iatf", icon: Car },
-      { name: "VDA", href: "/vda", icon: Award },
+      { name: "QMS", href: "/policies/qms", icon: ClipboardCheck },
+      { name: "HSE", href: "/policies/hse", icon: HardHat },
+      { name: "FSMS", href: "/policies/fsms", icon: Utensils },
+      { name: "ISMS", href: "/policies/isms", icon: Lock },
+      { name: "IATF", href: "/policies/iatf", icon: Car },
+      { name: "VDA", href: "/policies/vda", icon: Award },
     ]
   },
   {
@@ -122,6 +122,18 @@ const navigation = [
       { name: "ISMS", href: "/manuals/isms", icon: Lock },
       { name: "IATF", href: "/manuals/iatf", icon: Car },
       { name: "VDA", href: "/manuals/vda", icon: Award },
+    ]
+  },
+  {
+    name: "Policies",
+    defaultOpen: false,
+    items: [
+      { name: "QMS", href: "/policies/qms", icon: ClipboardCheck },
+      { name: "HSE", href: "/policies/hse", icon: HardHat },
+      { name: "FSMS", href: "/policies/fsms", icon: Utensils },
+      { name: "ISMS", href: "/policies/isms", icon: Lock },
+      { name: "IATF", href: "/policies/iatf", icon: Car },
+      { name: "VDA", href: "/policies/vda", icon: Award },
     ]
   },
   {
