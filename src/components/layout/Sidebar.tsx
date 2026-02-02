@@ -113,6 +113,18 @@ const navigation = [
     ]
   },
   {
+    name: "Manuals",
+    defaultOpen: false,
+    items: [
+      { name: "QMS", href: "/manuals/qms", icon: ClipboardCheck },
+      { name: "HSE", href: "/manuals/hse", icon: HardHat },
+      { name: "FSMS", href: "/manuals/fsms", icon: Utensils },
+      { name: "ISMS", href: "/manuals/isms", icon: Lock },
+      { name: "IATF", href: "/manuals/iatf", icon: Car },
+      { name: "VDA", href: "/manuals/vda", icon: Award },
+    ]
+  },
+  {
     name: "Modules", // Example other group
     defaultOpen: false,
     items: [
