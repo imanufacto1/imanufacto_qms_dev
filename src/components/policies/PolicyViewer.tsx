@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Search, ChevronDown, ChevronUp, FileText, Filter, LayoutGrid, List, Plus, Pencil, X, Save, Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Search, ChevronDown, ChevronUp, FileText, Filter, LayoutGrid, List, Plus, Pencil, X, Save, Trash2, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type PolicyCategory = "Manual" | "Policy" | "Plan" | "SOP" | "Work Instruction" | "Scenario";
@@ -124,9 +125,18 @@ export default function PolicyViewer({ title, description, documents: initialDoc
   return (
     <div className="space-y-6 relative">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">{title}</h1>
-          <p className="text-gray-500">{description}</p>
+        <div className="flex items-start gap-3">
+          <button 
+            onClick={() => router.back()}
+            className="mt-1 p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            title="Go Back"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">{title}</h1>
+            <p className="text-gray-500">{description}</p>
+          </div>
         </div>
         <div className="flex gap-2">
            <div className="relative w-full md:w-64">
