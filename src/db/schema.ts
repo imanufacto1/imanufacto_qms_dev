@@ -28,6 +28,15 @@ export const departments = pgTable('departments', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+// Department Master Table: Standardized list of departments
+export const departmentMaster = pgTable('department_master', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull().unique(), // e.g., "Human Resources"
+  code: text('code').notNull().unique(), // e.g., "HR"
+  description: text('description'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
 // Roles Table: Belong to a Department
 export const roles = pgTable('roles', {
   id: uuid('id').defaultRandom().primaryKey(),

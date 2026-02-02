@@ -23,6 +23,7 @@ interface PolicyViewerProps {
 }
 
 export default function PolicyViewer({ title, description, documents: initialDocuments, enableEditing = true }: PolicyViewerProps) {
+  const router = useRouter();
   // Initialize state with props
   const [documents, setDocuments] = useState<PolicyDocument[]>(initialDocuments);
   const [activeCategory, setActiveCategory] = useState<PolicyCategory | "All">("All");

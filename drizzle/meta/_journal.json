@@ -15,6 +15,13 @@
       "when": 1770042303015,
       "tag": "0001_purple_ikaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770056835202,
+      "tag": "0002_gray_sauron",
+      "breakpoints": true
     }
   ]
 }
