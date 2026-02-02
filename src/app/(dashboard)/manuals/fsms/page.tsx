@@ -1,120 +1,143 @@
-import React from 'react';
-import { Book, Utensils, AlertOctagon, CheckSquare, ClipboardList, ShieldCheck, Factory } from 'lucide-react';
+"use client";
 
-const clauses = [
+import React from 'react';
+import { Book, Utensils, Shield, FileText, AlertTriangle, Thermometer } from 'lucide-react';
+import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
+
+const documents: PolicyDocument[] = [
   {
-    number: "4",
-    title: "Context of the Organization",
-    icon: Factory,
-    requirements: [
-      "Determine external/internal issues affecting food safety.",
-      "Understand needs of interested parties.",
-      "Determine scope of FSMS.",
-      "Establish FSMS processes."
-    ]
+    id: "fsms-man-01",
+    category: "Manual",
+    title: "Food Safety Management Manual (ISO 22000)",
+    description: "Manual defining the system to ensure food safety from farm to fork.",
+    content: `1. Scope
+Applies to all food processing, handling, and storage activities.
+
+2. Context
+- Food safety hazards: Biological, Chemical, Physical, Allergenic.
+- Requirements: FDA/local regulations, Customer specs.
+
+3. Leadership
+Food Safety Policy: "Safe Food, Every Time."
+Food Safety Team Leader appointed.
+
+4. Planning
+- HACCP Plan (Hazard Analysis Critical Control Point).
+- PRPs (Prerequisite Programs).
+
+5. Support
+- Infrastructure: Sanitary design, Pest control, Waste disposal.
+- Training: Hygiene training for all handlers.
+
+6. Operation
+- OPRPs (Operational Prerequisite Programs).
+- CCPs (Critical Control Points) monitoring.
+- Traceability system (Mock recall).
+- Emergency preparedness (Power failure, Water contamination).
+
+7. Performance Evaluation
+- Validation of control measures.
+- Internal Audit.
+- Management Review.
+
+8. Improvement
+- Corrective actions.
+- Updating the FSMS.`,
+    icon: Book
   },
   {
-    number: "5",
-    title: "Leadership",
-    icon: ShieldCheck,
-    requirements: [
-      "Demonstrate leadership and commitment to food safety.",
-      "Establish Food Safety Policy.",
-      "Assign roles and responsibilities (including Food Safety Team Leader)."
-    ]
+    id: "sop-fsms-01",
+    category: "SOP",
+    title: "HACCP Plan Development",
+    description: "Methodology for conducting hazard analysis and establishing CCPs.",
+    content: `1. Assemble HACCP Team.
+2. Describe Product and Distribution.
+3. Identify Intended Use.
+4. Construct Flow Diagram.
+5. Verify Flow Diagram on-site.
+6. Conduct Hazard Analysis (List hazards, assess risk).
+7. Determine CCPs (Use Decision Tree).
+8. Establish Critical Limits.
+9. Establish Monitoring Procedures.
+10. Establish Corrective Actions.
+11. Establish Verification Procedures.
+12. Establish Record Keeping.`,
+    icon: Shield
   },
   {
-    number: "6",
-    title: "Planning",
-    icon: ClipboardList,
-    requirements: [
-      "Address risks and opportunities.",
-      "Set FSMS objectives.",
-      "Plan changes to the FSMS."
-    ]
+    id: "sop-fsms-02",
+    category: "SOP",
+    title: "Personal Hygiene Policy",
+    description: "Rules for personnel entering food handling areas.",
+    content: `1. Health Status: No illness (diarrhea, vomiting, jaundice) allowed in production.
+2. Clothing: Clean uniforms, hairnets covering all hair, beard snoods. No buttons/pockets above waist.
+3. Jewelry: No jewelry, watches, or visible piercings. Plain wedding bands may be allowed if covered.
+4. Hand Washing: Wash hands on entry, after toilet, after eating, after touching face/waste.
+5. Behavior: No eating, drinking, chewing gum, or smoking in production areas.`,
+    icon: Utensils
   },
   {
-    number: "7",
-    title: "Support",
-    icon: Utensils,
-    requirements: [
-      "Provide resources (infrastructure, work environment).",
-      "Control externally developed FSMS elements.",
-      "Ensure competence and awareness.",
-      "Communication (internal and external relevant to food safety).",
-      "Documented information control."
-    ]
+    id: "wi-fsms-01",
+    category: "Work Instruction",
+    title: "Hand Washing Procedure",
+    description: "Step-by-step guide for effective hand washing.",
+    content: `1. Wet hands with warm water.
+2. Apply soap.
+3. Lather for at least 20 seconds (palm, back of hands, between fingers, thumbs, wrists).
+4. Rinse thoroughly.
+5. Dry with single-use paper towel or air dryer.
+6. Sanitize with alcohol gel (if required).`,
+    icon: Utensils
   },
   {
-    number: "8",
-    title: "Operation",
-    icon: AlertOctagon,
-    requirements: [
-      "Operational planning and control.",
-      "Prerequisite Programs (PRPs).",
-      "Traceability system.",
-      "Emergency preparedness and response.",
-      "Hazard control (HACCP plan).",
-      "Control of monitoring and measuring.",
-      "Control of product and process nonconformities."
-    ]
+    id: "wi-fsms-02",
+    category: "Work Instruction",
+    title: "CCP Monitoring: Pasteurization Temperature",
+    description: "Instructions for monitoring the pasteurization CCP.",
+    content: `Critical Limit: Minimum 72°C for 15 seconds.
+
+Monitoring:
+1. Check temperature recorder every 2 hours.
+2. Verify flow diversion valve status.
+3. Record values in CCP Log.
+
+Corrective Action (if <72°C):
+1. Stop production.
+2. Divert product to rework/dump.
+3. Notify Quality Manager.
+4. Fix heating unit.
+5. Retest before restarting.`,
+    icon: Thermometer
   },
   {
-    number: "9",
-    title: "Performance Evaluation",
-    icon: CheckSquare,
-    requirements: [
-      "Monitoring, measurement, analysis and evaluation.",
-      "Internal audit.",
-      "Management review."
-    ]
-  },
-  {
-    number: "10",
-    title: "Improvement",
-    icon: Book,
-    requirements: [
-      "Nonconformity and corrective action.",
-      "Continual improvement.",
-      "Update of the FSMS."
-    ]
+    id: "scen-fsms-01",
+    category: "Scenario",
+    title: "Mock Recall Exercise",
+    description: "Scenario to test traceability system.",
+    content: `Scenario:
+Customer reports finding a piece of blue plastic in "Batch A123" of Cookies.
+
+Traceability Test:
+1. Identify raw materials used in Batch A123 (Flour Lot #X, Sugar Lot #Y).
+2. Identify packaging materials used.
+3. Identify all customers who received Batch A123.
+4. Verify if other batches used the same raw materials.
+
+Goal:
+Locate 100% of the affected product within 4 hours.
+
+Outcome:
+If unable to trace, the system fails. Root cause analysis required (e.g., missing production logs).`,
+    icon: AlertTriangle
   }
 ];
 
 export default function ManualsFSMSPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">FSMS Manual</h1>
-          <p className="text-gray-500">ISO 22000:2018 - Food Safety Management Systems</p>
-        </div>
-        <Book className="h-8 w-8 text-gray-400" />
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {clauses.map((clause) => (
-          <div key={clause.number} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-            <div className="p-5 border-b border-gray-100 bg-orange-50/50 flex items-center gap-3">
-              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-orange-100 text-orange-600 font-bold text-sm">
-                {clause.number}
-              </div>
-              <h3 className="font-semibold text-gray-900">{clause.title}</h3>
-              <clause.icon className="h-5 w-5 text-gray-400 ml-auto" />
-            </div>
-            <div className="p-5">
-              <ul className="space-y-3">
-                {clause.requirements.map((req, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
-                    <span>{req}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <PolicyViewer 
+      title="FSMS Manual (ISO 22000)"
+      description="Food Safety Management System Manual and Procedures."
+      documents={documents} 
+    />
   );
 }

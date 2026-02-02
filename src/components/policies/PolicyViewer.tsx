@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, ChevronDown, ChevronUp, FileText, Filter, LayoutGrid, List, Plus, Pencil, X, Save, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type PolicyCategory = "Policy" | "Plan" | "SOP" | "Work Instruction" | "Scenario";
+export type PolicyCategory = "Manual" | "Policy" | "Plan" | "SOP" | "Work Instruction" | "Scenario";
 
 export interface PolicyDocument {
   id: string;
@@ -32,7 +32,7 @@ export default function PolicyViewer({ title, description, documents: initialDoc
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentDoc, setCurrentDoc] = useState<Partial<PolicyDocument>>({
-    category: "Policy",
+    category: "Manual",
     title: "",
     description: "",
     content: ""
@@ -43,8 +43,8 @@ export default function PolicyViewer({ title, description, documents: initialDoc
     setDocuments(initialDocuments);
   }, [initialDocuments]);
 
-  const categories: (PolicyCategory | "All")[] = ["All", "Policy", "Plan", "SOP", "Work Instruction", "Scenario"];
-  const docCategories: PolicyCategory[] = ["Policy", "Plan", "SOP", "Work Instruction", "Scenario"];
+  const categories: (PolicyCategory | "All")[] = ["All", "Manual", "Policy", "Plan", "SOP", "Work Instruction", "Scenario"];
+  const docCategories: PolicyCategory[] = ["Manual", "Policy", "Plan", "SOP", "Work Instruction", "Scenario"];
 
   const filteredDocuments = documents.filter(doc => {
     const matchesCategory = activeCategory === "All" || doc.category === activeCategory;

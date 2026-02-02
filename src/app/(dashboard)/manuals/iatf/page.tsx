@@ -1,119 +1,149 @@
-import React from 'react';
-import { Book, Car, Settings, Wrench, ClipboardCheck, BarChart2, Zap } from 'lucide-react';
+"use client";
 
-const clauses = [
+import React from 'react';
+import { Book, Car, Settings, FileText, AlertTriangle, BarChart } from 'lucide-react';
+import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
+
+const documents: PolicyDocument[] = [
   {
-    number: "4",
-    title: "Context of the Organization",
-    icon: Settings,
-    requirements: [
-      "Determine scope including customer-specific requirements (CSRs).",
-      "Product safety processes.",
-      "Conformance of products and processes."
-    ]
+    id: "iatf-man-01",
+    category: "Manual",
+    title: "Automotive Quality Manual (IATF 16949)",
+    description: "Supplemental manual to ISO 9001 for automotive production.",
+    content: `1. Scope
+Includes all automotive products and service parts.
+
+2. Context
+- Customer Specific Requirements (CSRs) are mandatory.
+- Product Safety requirements.
+
+3. Leadership
+- Responsibility for product conformity.
+- Corporate responsibility policy (Anti-bribery, Whistleblowing).
+
+4. Planning
+- Risk analysis includes recall, field returns, warranty.
+- Contingency plans (utility interruption, labor shortage).
+
+5. Support
+- Calibration/Verification of measurement systems (MSA).
+- Laboratory requirements (ISO 17025).
+
+6. Operation
+- APQP (Advanced Product Quality Planning).
+- PPAP (Production Part Approval Process).
+- FMEA (Failure Mode and Effects Analysis).
+- Control Plan.
+- Total Productive Maintenance (TPM).
+
+7. Performance Evaluation
+- Manufacturing process monitoring (Cp, Cpk).
+- Internal Audit (System, Process, Product).
+
+8. Improvement
+- Problem solving (8D, 5 Why, Fishbone).
+- Error proofing (Poka-yoke).`,
+    icon: Book
   },
   {
-    number: "5",
-    title: "Leadership",
-    icon: Car,
-    requirements: [
-      "Corporate responsibility policies (anti-bribery, ethics).",
-      "Process owners must be identified.",
-      "Management review of product safety."
-    ]
+    id: "sop-iatf-01",
+    category: "SOP",
+    title: "APQP Procedure",
+    description: "Advanced Product Quality Planning process.",
+    content: `Phase 1: Plan and Define Program.
+Phase 2: Product Design and Development.
+Phase 3: Process Design and Development.
+Phase 4: Product and Process Validation.
+Phase 5: Feedback, Assessment, and Corrective Action.
+
+Key Outputs:
+- Design FMEA
+- Process Flow Chart
+- Process FMEA
+- Control Plan
+- Work Instructions`,
+    icon: Car
   },
   {
-    number: "6",
-    title: "Planning",
-    icon: ClipboardCheck,
-    requirements: [
-      "Risk analysis (FMEA).",
-      "Contingency plans (supply interruption, cyber-attacks).",
-      "Quality objectives for internal and external performance."
-    ]
+    id: "sop-iatf-02",
+    category: "SOP",
+    title: "PPAP Submission",
+    description: "Production Part Approval Process requirements.",
+    content: `Levels of Submission (1-5). Default is Level 3.
+
+Required Elements (18):
+1. Design Records
+2. Engineering Change Documents
+3. Customer Engineering Approval
+4. Design FMEA
+5. Process Flow Diagrams
+6. Process FMEA
+7. Control Plan
+8. MSA Studies
+9. Dimensional Results
+10. Material/Performance Test Results
+11. Initial Process Studies (Cpk)
+12. Qualified Laboratory Documentation
+13. Appearance Approval Report (AAR)
+14. Sample Production Parts
+15. Master Sample
+16. Checking Aids
+17. Customer Specific Requirements
+18. PSW (Part Submission Warrant)`,
+    icon: FileText
   },
   {
-    number: "7",
-    title: "Support",
-    icon: Wrench,
-    requirements: [
-      "Plant, facility, and equipment planning (Lean manufacturing principles).",
-      "Measurement systems analysis (MSA).",
-      "Calibration and verification records.",
-      "Competence (on-the-job training)."
-    ]
+    id: "wi-iatf-01",
+    category: "Work Instruction",
+    title: "Control Plan Development",
+    description: "Guide to creating a Control Plan.",
+    content: `Columns:
+1. Part/Process Number
+2. Process Name/Operation Description
+3. Machine/Device
+4. Characteristics (Product/Process) - Critical/Significant
+5. Specifications/Tolerance
+6. Evaluation Measurement Technique
+7. Sample Size & Frequency
+8. Control Method (X-bar chart, Go/No-Go)
+9. Reaction Plan (What to do if out of control)`,
+    icon: Settings
   },
   {
-    number: "8",
-    title: "Operation",
-    icon: Zap,
-    requirements: [
-      "Operational planning (APQP).",
-      "Customer requirements review.",
-      "Design and development (DFMEA, PFMEA).",
-      "Supplier quality management (PPAP).",
-      "Control of production (Control Plan).",
-      "Total Productive Maintenance (TPM)."
-    ]
-  },
-  {
-    number: "9",
-    title: "Performance Evaluation",
-    icon: BarChart2,
-    requirements: [
-      "Monitoring and measurement of manufacturing processes (SPC).",
-      "Customer satisfaction.",
-      "Internal audit (System, Manufacturing Process, Product).",
-      "Management review."
-    ]
-  },
-  {
-    number: "10",
-    title: "Improvement",
-    icon: ClipboardCheck,
-    requirements: [
-      "Problem solving (8D, 5 Whys).",
-      "Error-proofing.",
-      "Warranty management systems.",
-      "Continual improvement."
-    ]
+    id: "scen-iatf-01",
+    category: "Scenario",
+    title: "Warranty Claim Analysis",
+    description: "Handling a field failure warranty claim.",
+    content: `Scenario:
+OEM customer returns 50 parts for "Noise" warranty claim.
+
+Process (NTF - No Trouble Found vs Confirmed):
+1. Visual Inspection.
+2. Functional Test on standard tester.
+3. Functional Test on vehicle (if possible).
+4. Teardown analysis.
+
+Findings:
+30 parts: No defect found (NTF).
+20 parts: Confirmed noise due to loose internal clip.
+
+Root Cause:
+Clip installation tool was not calibrated, applying insufficient torque.
+
+Action:
+1. Calibrate tool.
+2. Implement torque monitoring (Poka-yoke) connected to PLC.
+3. Update PFMEA and Control Plan.`,
+    icon: AlertTriangle
   }
 ];
 
 export default function ManualsIATFPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">IATF Manual</h1>
-          <p className="text-gray-500">IATF 16949:2016 - Automotive Quality Management System</p>
-        </div>
-        <Book className="h-8 w-8 text-gray-400" />
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {clauses.map((clause) => (
-          <div key={clause.number} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-            <div className="p-5 border-b border-gray-100 bg-red-50/50 flex items-center gap-3">
-              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-red-100 text-red-600 font-bold text-sm">
-                {clause.number}
-              </div>
-              <h3 className="font-semibold text-gray-900">{clause.title}</h3>
-              <clause.icon className="h-5 w-5 text-gray-400 ml-auto" />
-            </div>
-            <div className="p-5">
-              <ul className="space-y-3">
-                {clause.requirements.map((req, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-400 shrink-0" />
-                    <span>{req}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <PolicyViewer 
+      title="IATF Manual (Automotive)"
+      description="IATF 16949 Quality Management System Manual."
+      documents={documents} 
+    />
   );
 }
