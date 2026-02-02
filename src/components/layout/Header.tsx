@@ -2,6 +2,7 @@ import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 import { Search, LogOut } from "lucide-react";
 import { cookies } from "next/headers";
 import { logoutAction } from "@/app/actions/auth";
+import { ThemeToggle } from "./ThemeToggle";
 
 export async function Header() {
   const cookieStore = await cookies();
@@ -22,6 +23,7 @@ export async function Header() {
         </div>
       </div>
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         {internalSession ? (
           <div className="flex items-center gap-4">
              <span className="text-sm font-medium text-gray-700">Internal User</span>
