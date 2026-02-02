@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "dev", "qa", "prod" ]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   # ------------------------------------------------------------------
   # 1. Continuous Integration (CI) - Runs on ALL PRs and Pushes
@@ -61,7 +65,36 @@ jobs:
           echo "✅ Deployment to Dev Complete"
 
   # ------------------------------------------------------------------
-  # 3. Deploy to QA - Runs only on PUSH to 'qa' (merged from dev)
+  # 3. Promote Dev to QA (Create PR) - Runs after successful Dev Deploy
+  # ------------------------------------------------------------------
+  promote-to-qa:
+    name: Create PR (Dev -> QA)
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking for existing PRs from dev to qa..."
+          EXISTING_PR=$(gh pr list --base qa --head dev --json url --jq '.[0].url')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            echo "Creating PR from dev to qa..."
+            gh pr create \
+              --base qa \
+              --head dev \
+              --title "🚀 Promote Dev to QA" \
+              --body "Automated PR to promote changes from Development to QA environment. Triggered by successful deployment to Dev."
+          else
+            echo "PR already exists: $EXISTING_PR"
+          fi
+
+  # ------------------------------------------------------------------
+  # 4. Deploy to QA - Runs only on PUSH to 'qa' (merged from dev)
   # ------------------------------------------------------------------
   deploy-qa:
     name: Deploy to QA
@@ -82,7 +115,36 @@ jobs:
           echo "✅ Deployment to QA Complete"
 
   # ------------------------------------------------------------------
-  # 4. Deploy to Production (Prod) - Runs only on PUSH to 'prod' (merged from qa)
+  # 5. Promote QA to Prod (Create PR) - Runs after successful QA Deploy
+  # ------------------------------------------------------------------
+  promote-to-prod:
+    name: Create PR (QA -> Prod)
+    needs: deploy-qa
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking for existing PRs from qa to prod..."
+          EXISTING_PR=$(gh pr list --base prod --head qa --json url --jq '.[0].url')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            echo "Creating PR from qa to prod..."
+            gh pr create \
+              --base prod \
+              --head qa \
+              --title "🚀 Promote QA to Production" \
+              --body "Automated PR to promote changes from QA to Production environment. Triggered by successful deployment to QA."
+          else
+            echo "PR already exists: $EXISTING_PR"
+          fi
+
+  # ------------------------------------------------------------------
+  # 6. Deploy to Production (Prod) - Runs only on PUSH to 'prod' (merged from qa)
   # ------------------------------------------------------------------
   deploy-prod:
     name: Deploy to Production
@@ -99,6 +161,5 @@ jobs:
       - name: Deploy to Production Environment
         run: |
           echo "🚀 Deploying to Production Environment..."
-          echo "⚠️  Ensure manual approval was granted if configured in GitHub Environments"
           # Add your actual deployment commands here
           echo "✅ Deployment to Production Complete"
