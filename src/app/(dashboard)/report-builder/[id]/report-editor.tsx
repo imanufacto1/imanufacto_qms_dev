@@ -70,6 +70,7 @@ export default function ReportEditor({ initialData, isNew }: ReportEditorProps) 
   const [loading, setLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<string>('');
+  const [localLastModified, setLocalLastModified] = useState<string>('');
 
   // Form State
   const initialPageSetup: PageSetup = (initialData?.pageSetup && typeof initialData.pageSetup === 'object')
@@ -120,6 +121,28 @@ export default function ReportEditor({ initialData, isNew }: ReportEditorProps) 
       }
     })();
   }, []);
+
+  React.useEffect(() => {
+    if (initialData?.lastModifiedAt) {
+      const d = new Date(
+        typeof initialData.lastModifiedAt === 'string'
+          ? initialData.lastModifiedAt
+          : (initialData.lastModifiedAt as Date)
+      );
+      const formatted = new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }).format(d);
+      setLocalLastModified(formatted);
+    } else {
+      setLocalLastModified('');
+    }
+  }, [initialData?.lastModifiedAt]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -245,6 +268,11 @@ export default function ReportEditor({ initialData, isNew }: ReportEditorProps) 
                   ) + ' UTC'
                 : '—'}
             </div>
+            {localLastModified && (
+              <div className="mt-0.5 text-xs text-gray-500">
+                Your local time: {localLastModified}
+              </div>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Modified By</label>
