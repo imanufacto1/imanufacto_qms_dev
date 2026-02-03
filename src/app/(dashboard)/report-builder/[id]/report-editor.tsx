@@ -225,13 +225,24 @@ export default function ReportEditor({ initialData, isNew }: ReportEditorProps) 
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Last Modified</label>
-            <div className="mt-1 text-sm text-gray-600">
+            <div className="mt-1 text-sm text-gray-600" suppressHydrationWarning>
               {initialData?.lastModifiedAt
-                ? new Date(
-                    typeof initialData.lastModifiedAt === 'string'
-                      ? initialData.lastModifiedAt
-                      : (initialData.lastModifiedAt as Date)
-                  ).toLocaleString()
+                ? new Intl.DateTimeFormat('en-US', {
+                    timeZone: 'UTC',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                  }).format(
+                    new Date(
+                      typeof initialData.lastModifiedAt === 'string'
+                        ? initialData.lastModifiedAt
+                        : (initialData.lastModifiedAt as Date)
+                    )
+                  ) + ' UTC'
                 : '—'}
             </div>
           </div>

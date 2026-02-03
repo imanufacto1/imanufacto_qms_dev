@@ -5,7 +5,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Loader2, RefreshCw } from 'lucide-react';
 
-interface ReportData {
+export interface ReportData {
   id: string;
   reportName: string;
   reportCode: string;

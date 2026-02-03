@@ -1,6 +1,6 @@
 import React from 'react';
 import { getReportByCode } from '@/app/actions/report-builder';
-import ReportViewer from './report-viewer';
+import ReportViewer, { ReportData } from './report-viewer';
 import { AlertTriangle } from 'lucide-react';
 
 interface PageProps {
@@ -33,5 +33,5 @@ export default async function ReportViewPage({ params }: PageProps) {
     pageSetup: (report.pageSetup && typeof report.pageSetup === 'object') ? report.pageSetup : null,
   };
 
-  return <ReportViewer report={viewerReport as any} />;
+  return <ReportViewer report={viewerReport as ReportData} />;
 }
