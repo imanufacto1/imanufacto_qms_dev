@@ -37,10 +37,8 @@ export default function DepartmentManagementClient({ organizations, masterDepart
   // Load Plants when Org changes
   useEffect(() => {
     if (selectedOrg) {
-      setLoading(true);
       getPlants(selectedOrg).then(res => {
         if (res.success && res.data) setPlants(res.data as Plant[]);
-        setLoading(false);
       });
     } else {
       setPlants([]);
@@ -52,10 +50,8 @@ export default function DepartmentManagementClient({ organizations, masterDepart
   // Load Departments when Plant changes
   useEffect(() => {
     if (selectedPlant) {
-      setLoading(true);
       getDepartmentsByPlant(selectedPlant).then(res => {
         if (res.success && res.data) setDepartments(res.data as Department[]);
-        setLoading(false);
       });
     } else {
       setDepartments([]);

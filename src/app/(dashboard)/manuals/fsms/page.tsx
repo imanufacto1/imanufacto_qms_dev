@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Book, Utensils, Shield, FileText, AlertTriangle, Thermometer } from 'lucide-react';
+import { Book, Utensils, Shield, AlertTriangle, Thermometer } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
 
 const documents: PolicyDocument[] = [
