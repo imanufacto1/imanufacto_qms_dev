@@ -17,7 +17,6 @@ export default async function PlantsPage() {
       </div>
 
       <PlantsClient 
-        // @ts-expect-error -- DB type vs Client type mismatch usually fine for simple string props
         initialPlants={plants || []} 
         organizations={organizations || []} 
       />
