@@ -36,6 +36,20 @@
       "when": 1770058230986,
       "tag": "0004_rare_landau",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1770100276214,
+      "tag": "0005_tiny_shen",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1770106613165,
+      "tag": "0006_damp_zaladane",
+      "breakpoints": true
     }
   ]
 }

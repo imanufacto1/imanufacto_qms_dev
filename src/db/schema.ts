@@ -1,5 +1,5 @@
 import { pgTable, text, uuid, jsonb, timestamp, integer, boolean, uniqueIndex } from 'drizzle-orm/pg-core';
-import { relations, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 // SCD Type 2 Helper Columns
 const scdColumns = {
@@ -96,52 +96,43 @@ export const forms = pgTable('forms', {
   id: uuid('id').defaultRandom().primaryKey(),
   tenantId: text('tenant_id').notNull(), // Clerk Organization ID or similar
   title: text('title').notNull(),
-  version: integer('version').default(1),
+  formVersion: integer('form_version').default(1),
   schema: jsonb('schema').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
+  ...scdColumns,
 });
 
-// FormSubmissions Table: (Existing)
-export const formSubmissions = pgTable('form_submissions', {
+// Reports Table: For Report Builder
+export const reports = pgTable('reports', {
   id: uuid('id').defaultRandom().primaryKey(),
-  formId: uuid('form_id').references(() => forms.id).notNull(),
-  submittedBy: text('submitted_by').notNull(),
-  data: jsonb('data').notNull(),
+  reportName: text('report_name').notNull(),
+  reportCode: text('report_code').notNull(),
+  reportType: text('report_type').default('PDF v2'),
+  status: text('status').default('Inactive'), // Active, Inactive
+  schedulerStatus: text('scheduler_status').default('Inactive'),
+  scheduledTime: timestamp('scheduled_time'),
+  previousExecutedTime: timestamp('previous_executed_time'),
+  
+  // Configuration Fields
+  templateContent: text('template_content'), // HTML content
+  headerContent: text('header_content'),
+  footerContent: text('footer_content'),
+  pageSetup: jsonb('page_setup'), // { paperFormat, orientation, margins, etc. }
+  localScripts: text('local_scripts'),
+  dataSettings: jsonb('data_settings'),
+  serverScript: text('server_script'),
+  excelTemplate: text('excel_template'), // Base64 or URL? text for now
+
+  // Audit & Versioning
+  lastModifiedAt: timestamp('last_modified_at').defaultNow(),
+  lastModifiedBy: text('last_modified_by'),
+  versionMajor: integer('version_major').default(0).notNull(),
+  versionMinor: integer('version_minor').default(0).notNull(),
+  versionPatch: integer('version_patch').default(0).notNull(),
+  versionSemver: text('version_semver').default('0.0.0').notNull(),
+
   createdAt: timestamp('created_at').defaultNow(),
-});
-
-// Relations definitions (Optional but good for Drizzle Queries)
-export const organizationsRelations = relations(organizations, ({ many }) => ({
-  plants: many(plants),
-}));
-
-export const plantsRelations = relations(plants, ({ one, many }) => ({
-  organization: one(organizations, {
-    fields: [plants.organizationId],
-    references: [organizations.id],
-  }),
-  departments: many(departments),
-}));
-
-export const departmentsRelations = relations(departments, ({ one, many }) => ({
-  plant: one(plants, {
-    fields: [departments.plantId],
-    references: [plants.id],
-  }),
-  roles: many(roles),
-}));
-
-export const rolesRelations = relations(roles, ({ one, many }) => ({
-  department: one(departments, {
-    fields: [roles.departmentId],
-    references: [departments.id],
-  }),
-  users: many(users),
-}));
-
-export const usersRelations = relations(users, ({ one }) => ({
-  role: one(roles, {
-    fields: [users.roleId],
-    references: [roles.id],
-  }),
+  ...scdColumns,
+}, (t) => ({
+  unqReportCode: uniqueIndex('unq_report_code').on(t.reportCode).where(sql`${t.isCurrent} = true`),
 }));
