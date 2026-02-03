@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, X, Shield, ChevronRight } from 'lucide-react';
+import { Plus, Trash2, X, Shield, ChevronRight } from 'lucide-react';
 import { getPlants } from '@/app/actions/plant';
 import { getDepartmentsByPlant } from '@/app/actions/department';
 import { getRoles, addRole, deleteRole } from '@/app/actions/role';
@@ -9,7 +9,7 @@ import { getRoles, addRole, deleteRole } from '@/app/actions/role';
 interface Organization { id: string; name: string; }
 interface Plant { id: string; name: string; }
 interface Department { id: string; name: string; }
-interface Role { id: string; name: string; permissions: any; }
+interface Role { id: string; name: string; permissions: Record<string, unknown>; }
 
 export default function RolesClient({ organizations }: { organizations: Organization[] }) {
   // Selection State
@@ -23,51 +23,58 @@ export default function RolesClient({ organizations }: { organizations: Organiza
   const [roles, setRoles] = useState<Role[]>([]);
 
   // UI State
-  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newRoleName, setNewRoleName] = useState('');
+
+  // Handlers
+  const handleOrgChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedOrg(val);
+    setPlants([]);
+    setSelectedPlant('');
+    setDepartments([]);
+    setSelectedDept('');
+    setRoles([]);
+  };
+
+  const handlePlantChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedPlant(val);
+    setDepartments([]);
+    setSelectedDept('');
+    setRoles([]);
+  };
+
+  const handleDeptChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedDept(val);
+    setRoles([]);
+  };
 
   // Fetch Plants when Org changes
   useEffect(() => {
     if (selectedOrg) {
-      setLoading(true);
       getPlants(selectedOrg).then(res => {
         if (res.success && res.data) setPlants(res.data as Plant[]);
-        setLoading(false);
       });
-    } else {
-      setPlants([]);
     }
-    setSelectedPlant('');
-    setSelectedDept('');
-    setRoles([]);
   }, [selectedOrg]);
 
   // Fetch Departments when Plant changes
   useEffect(() => {
     if (selectedPlant) {
-      setLoading(true);
       getDepartmentsByPlant(selectedPlant).then(res => {
         if (res.success && res.data) setDepartments(res.data as Department[]);
-        setLoading(false);
       });
-    } else {
-      setDepartments([]);
     }
-    setSelectedDept('');
-    setRoles([]);
   }, [selectedPlant]);
 
   // Fetch Roles when Department changes
   useEffect(() => {
     if (selectedDept) {
-      setLoading(true);
       getRoles(selectedDept).then(res => {
         if (res.success && res.data) setRoles(res.data as Role[]);
-        setLoading(false);
       });
-    } else {
-      setRoles([]);
     }
   }, [selectedDept]);
 
@@ -112,7 +119,7 @@ export default function RolesClient({ organizations }: { organizations: Organiza
           <select 
             className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
             value={selectedOrg}
-            onChange={(e) => setSelectedOrg(e.target.value)}
+            onChange={handleOrgChange}
           >
             <option value="">Select Organization...</option>
             {organizations.map(org => <option key={org.id} value={org.id}>{org.name}</option>)}
@@ -124,7 +131,7 @@ export default function RolesClient({ organizations }: { organizations: Organiza
           <select 
             className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
             value={selectedPlant}
-            onChange={(e) => setSelectedPlant(e.target.value)}
+            onChange={handlePlantChange}
             disabled={!selectedOrg}
           >
             <option value="">Select Plant...</option>
@@ -137,7 +144,7 @@ export default function RolesClient({ organizations }: { organizations: Organiza
           <select 
             className="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
             value={selectedDept}
-            onChange={(e) => setSelectedDept(e.target.value)}
+            onChange={handleDeptChange}
             disabled={!selectedPlant}
           >
             <option value="">Select Department...</option>

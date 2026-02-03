@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Shield, Key, Eye, Lock, FileCode, Server, Wifi, Smartphone, HardDrive, UserMinus, Globe } from 'lucide-react';
+import { Shield, Key, Eye, Lock, FileCode, Server, Smartphone, HardDrive, UserMinus, Globe } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
 
 const documents: PolicyDocument[] = [

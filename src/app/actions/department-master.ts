@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { departmentMaster } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function getDepartments() {
@@ -17,14 +17,18 @@ export async function getDepartments() {
   }
 }
 
+interface DbError {
+  code: string;
+}
+
 export async function addDepartment(data: { name: string; code: string; description: string }) {
   try {
     await db.insert(departmentMaster).values(data);
     revalidatePath('/department');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to add department:', error);
-    if (error.code === '23505') {
+    if ((error as DbError).code === '23505') {
        return { success: false, error: 'Department with this name or code already exists.' };
     }
     return { success: false, error: 'Failed to add department' };

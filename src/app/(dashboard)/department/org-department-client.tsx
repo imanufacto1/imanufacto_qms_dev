@@ -24,11 +24,25 @@ export default function DepartmentManagementClient({ organizations, masterDepart
   // Data State
   const [plants, setPlants] = useState<Plant[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [loading, setLoading] = useState(false);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'select' | 'create'>('select');
+  
+  // Handlers
+  const handleOrgChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedOrg(val);
+    setPlants([]);
+    setSelectedPlant('');
+    setDepartments([]);
+  };
+
+  const handlePlantChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedPlant(val);
+    setDepartments([]);
+  };
   
   // Form State
   const [selectedMasterId, setSelectedMasterId] = useState('');
@@ -40,11 +54,7 @@ export default function DepartmentManagementClient({ organizations, masterDepart
       getPlants(selectedOrg).then(res => {
         if (res.success && res.data) setPlants(res.data as Plant[]);
       });
-    } else {
-      setPlants([]);
     }
-    setSelectedPlant('');
-    setDepartments([]);
   }, [selectedOrg]);
 
   // Load Departments when Plant changes
@@ -53,8 +63,6 @@ export default function DepartmentManagementClient({ organizations, masterDepart
       getDepartmentsByPlant(selectedPlant).then(res => {
         if (res.success && res.data) setDepartments(res.data as Department[]);
       });
-    } else {
-      setDepartments([]);
     }
   }, [selectedPlant]);
 
@@ -129,7 +137,7 @@ export default function DepartmentManagementClient({ organizations, masterDepart
             <select 
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
               value={selectedOrg}
-              onChange={(e) => setSelectedOrg(e.target.value)}
+              onChange={handleOrgChange}
             >
               <option value="">Choose an Organization...</option>
               {organizations.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
@@ -141,7 +149,7 @@ export default function DepartmentManagementClient({ organizations, masterDepart
             <select 
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white disabled:bg-gray-50 disabled:text-gray-400"
               value={selectedPlant}
-              onChange={(e) => setSelectedPlant(e.target.value)}
+              onChange={handlePlantChange}
               disabled={!selectedOrg}
             >
               <option value="">

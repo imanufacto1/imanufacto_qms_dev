@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ChevronDown, ChevronUp, FileText, Filter, LayoutGrid, List, Plus, Pencil, X, Save, Trash2, ArrowLeft } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, FileText, Filter, Plus, Pencil, X, Save, Trash2, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type PolicyCategory = "Manual" | "Policy" | "Plan" | "SOP" | "Work Instruction" | "Scenario";

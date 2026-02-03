@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Award, ClipboardCheck, CheckCircle, PenTool, Scale, AlertOctagon, BookOpen, Microscope } from 'lucide-react';
+import { Award, ClipboardCheck, PenTool, Scale, AlertOctagon, Microscope } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
 
 const documents: PolicyDocument[] = [

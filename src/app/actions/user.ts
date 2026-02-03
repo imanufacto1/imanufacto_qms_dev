@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { users, roles, departments, plants, organizations } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 // Fetch users with their role, department, plant, and organization info
@@ -34,6 +34,11 @@ export async function getUsers() {
   }
 }
 
+interface DbError {
+  code: string;
+  constraint_name?: string;
+}
+
 export async function addUser(data: { 
   roleId: string; 
   firstName: string; 
@@ -46,13 +51,14 @@ export async function addUser(data: {
     await db.insert(users).values(data);
     revalidatePath('/users');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to add user:', error);
-    if (error.code === '23505') {
-       if (error.constraint_name?.includes('email')) {
+    const err = error as DbError;
+    if (err.code === '23505') {
+       if (err.constraint_name?.includes('email')) {
          return { success: false, error: 'Email already exists.' };
        }
-       if (error.constraint_name?.includes('username')) {
+       if (err.constraint_name?.includes('username')) {
          return { success: false, error: 'Username already exists.' };
        }
        return { success: false, error: 'User already exists.' };

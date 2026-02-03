@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Shield, Flame, Droplet, HardHat, AlertTriangle, FileText, ClipboardCheck, Activity, Truck, Skull, Zap } from 'lucide-react';
+import { Shield, Flame, Droplet, HardHat, AlertTriangle, ClipboardCheck, Activity, Truck, Skull, Zap } from 'lucide-react';
 import PolicyViewer, { PolicyDocument } from '@/components/policies/PolicyViewer';
 
 const documents: PolicyDocument[] = [

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClipboardCheck, FileText, Briefcase, Factory, Shield, Truck, HeartPulse, Cpu, Plane, Ship } from 'lucide-react';
+import { ClipboardCheck, Briefcase, Factory, Truck, HeartPulse, Cpu } from 'lucide-react';
 import Link from 'next/link';
 
 const industries = [

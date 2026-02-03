@@ -1,5 +1,5 @@
 import React from 'react';
-import { Car, Wrench, Settings, Truck, Battery } from 'lucide-react';
+import { Car, Wrench, Truck, Battery } from 'lucide-react';
 import Link from 'next/link';
 
 const industries = [

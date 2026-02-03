@@ -21,14 +21,18 @@ export async function getRoles(departmentId: string) {
   }
 }
 
-export async function addRole(data: { departmentId: string; name: string; permissions?: any }) {
+interface DbError {
+  code: string;
+}
+
+export async function addRole(data: { departmentId: string; name: string; permissions?: Record<string, unknown> }) {
   try {
     await db.insert(roles).values(data);
     revalidatePath('/roles');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to add role:', error);
-    if (error.code === '23505') {
+    if ((error as DbError).code === '23505') {
       return { success: false, error: 'Role name already exists in this department.' };
     }
     return { success: false, error: 'Failed to add role' };

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, X, User, Search, Filter } from 'lucide-react';
+import { Plus, Trash2, X, User, Search, Filter } from 'lucide-react';
 import { getPlants } from '@/app/actions/plant';
 import { getDepartmentsByPlant } from '@/app/actions/department';
 import { getRoles } from '@/app/actions/role';
@@ -30,7 +30,7 @@ export default function UsersClient({
   initialUsers: UserData[], 
   organizations: Organization[] 
 }) {
-  const [users, setUsers] = useState<UserData[]>(initialUsers);
+  const [users] = useState<UserData[]>(initialUsers);
   const [searchQuery, setSearchQuery] = useState('');
   
   // Modal & Form State

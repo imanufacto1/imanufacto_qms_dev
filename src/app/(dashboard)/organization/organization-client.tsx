@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Plus, Trash2, Save, X, Building, Factory } from 'lucide-react';
+import { Plus, Trash2, X, Building, Factory } from 'lucide-react';
 import { addOrganization, deleteOrganization } from '@/app/actions/organization';
 
 interface Organization {
@@ -13,7 +13,7 @@ interface Organization {
 }
 
 export default function OrganizationClient({ initialOrganizations }: { initialOrganizations: Organization[] }) {
-  const [organizations, setOrganizations] = useState<Organization[]>(initialOrganizations);
+  const [organizations] = useState<Organization[]>(initialOrganizations);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ name: '', slug: '' });

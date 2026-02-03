@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { organizations, plants } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function getOrganizations() {
@@ -15,6 +15,10 @@ export async function getOrganizations() {
     console.error('Failed to fetch organizations:', error);
     return { success: false, error: 'Failed to fetch organizations' };
   }
+}
+
+interface DbError {
+  code: string;
 }
 
 export async function addOrganization(data: { name: string; slug?: string; logo?: string }) {
@@ -37,9 +41,9 @@ export async function addOrganization(data: { name: string; slug?: string; logo?
 
     revalidatePath('/organization');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to add organization:', error);
-    if (error.code === '23505') {
+    if ((error as DbError).code === '23505') {
       return { success: false, error: 'Organization name already exists.' };
     }
     return { success: false, error: 'Failed to add organization' };

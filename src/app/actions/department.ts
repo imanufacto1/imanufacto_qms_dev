@@ -21,14 +21,18 @@ export async function getDepartmentsByPlant(plantId: string) {
   }
 }
 
+interface DbError {
+  code: string;
+}
+
 export async function addDepartmentInstance(data: { plantId: string; name: string; managerId?: string }) {
   try {
     await db.insert(departments).values(data);
     revalidatePath('/department');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to add department:', error);
-    if (error.code === '23505') {
+    if ((error as DbError).code === '23505') {
       return { success: false, error: 'Department name already exists in this plant.' };
     }
     return { success: false, error: 'Failed to add department' };

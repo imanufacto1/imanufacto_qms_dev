@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, X, Factory, MapPin, Building } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Trash2, X, Factory, MapPin, Building, Save } from 'lucide-react';
 import { addPlant, deletePlant } from '@/app/actions/plant';
 
 interface Plant {
@@ -23,7 +23,7 @@ interface PlantsClientProps {
 }
 
 export default function PlantsClient({ initialPlants, organizations }: PlantsClientProps) {
-  const [plants, setPlants] = useState<Plant[]>(initialPlants);
+  const [plants] = useState<Plant[]>(initialPlants);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
