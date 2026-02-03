@@ -13,11 +13,19 @@ const poolConfig = {
   connectionString: process.env.DATABASE_URL!,
   max: process.env.DB_MAX_CONNECTIONS ? parseInt(process.env.DB_MAX_CONNECTIONS) : 10,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 10000,
+  keepAlive: true,
 };
 
 // Use a singleton pattern for the pool to prevent multiple pools during hot-reloading in dev
 const pool = globalPool.pool || new Pool(poolConfig);
+
+// Prevent crash on idle client error
+if (!globalPool.pool) {
+  pool.on('error', (err) => {
+    console.error('Unexpected error on idle client', err);
+  });
+}
 
 if (process.env.NODE_ENV !== 'production') {
   globalPool.pool = pool;
