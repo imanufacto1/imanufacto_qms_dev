@@ -55,3 +55,21 @@ export async function logoutAction() {
     cookieStore.delete('internal_session');
     redirect('/internal-login');
 }
+
+export async function getCurrentUserIdentity(): Promise<string | null> {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('internal_session');
+  if (session?.value) {
+    try {
+      const user = await db.query.users.findFirst({
+        where: eq(users.id, session.value),
+      });
+      if (user) {
+        return user.email || user.username || null;
+      }
+    } catch (error) {
+      console.error('Failed to fetch current user identity:', error);
+    }
+  }
+  return null;
+}
